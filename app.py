@@ -61,7 +61,7 @@ pdf_base64 = base64.b64encode(pdf_bytes).decode("utf-8")
 pdf_display = f'<iframe src="data:application/pdf;base64,{pdf_base64}" width="700" height="500" type="application/pdf"></iframe>'
 st.markdown(pdf_display, unsafe_allow_html=True)
 
-pdf_url = "https://www.example.com/proyecto-final1.pdf"  # URL del archivo PDF
+pdf_url = "https://github.com/doctoradoiaup/ver-pdf/blob/main/proyecto-final1.pdf"  # URL del archivo PDF
 pdf_display = f'<iframe src="{pdf_url}" width="700" height="500"></iframe>'
 st.markdown(pdf_display, unsafe_allow_html=True)
 
