@@ -44,10 +44,8 @@ st.sidebar.write("Fecha: Octubre del 2024")
 #st.write("Navega a través de las secciones en el menú lateral para explorar más sobre el proyecto.")
 
 
-
-
 # Configuración de la página
-st.set_page_config(page_title="Proyecto Final", layout="wide")
+#st.set_page_config(page_title="Proyecto Final", layout="wide")
 
 # Título de la aplicación
 st.title("Visor de PDF en Streamlit")
@@ -63,3 +61,5 @@ with open(pdf_file_path, "rb") as pdf_file:
 b64_pdf = base64.b64encode(pdf_bytes).decode("utf-8")
 href = f'<a href="data:application/octet-stream;base64,{b64_pdf}" download="proyecto-final1.pdf">Descargar PDF</a>'
 st.markdown(href, unsafe_allow_html=True)
+
+
