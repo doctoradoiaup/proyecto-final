@@ -46,6 +46,9 @@ st.sidebar.write("Fecha: Octubre del 2024")
 
 
 
+# Configuración de la página
+st.set_page_config(page_title="Proyecto Final", layout="wide")
+
 # Título de la aplicación
 st.title("Visor de PDF en Streamlit")
 
@@ -56,12 +59,7 @@ pdf_file_path = "proyecto-final1.pdf"  # Cambia esto a la ruta de tu archivo PDF
 with open(pdf_file_path, "rb") as pdf_file:
     pdf_bytes = pdf_file.read()
 
-# Mostrar el PDF en un iframe
-pdf_base64 = base64.b64encode(pdf_bytes).decode("utf-8")
-pdf_display = f'<iframe src="data:application/pdf;base64,{pdf_base64}" width="700" height="500" type="application/pdf"></iframe>'
-st.markdown(pdf_display, unsafe_allow_html=True)
-
-pdf_url = "https://github.com/doctoradoiaup/ver-pdf/blob/main/proyecto-final1.pdf"  # URL del archivo PDF
-pdf_display = f'<iframe src="{pdf_url}" width="700" height="500"></iframe>'
-st.markdown(pdf_display, unsafe_allow_html=True)
-
+# Ofrecer la descarga del archivo PDF
+b64_pdf = base64.b64encode(pdf_bytes).decode("utf-8")
+href = f'<a href="data:application/octet-stream;base64,{b64_pdf}" download="proyecto-final1.pdf">Descargar PDF</a>'
+st.markdown(href, unsafe_allow_html=True)
