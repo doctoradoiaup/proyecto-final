@@ -16,7 +16,7 @@ from statsmodels.formula.api import ols
 
 # Título de la aplicación
 st.title("Estadística para la investigación")
-st.subheader("Proyecto final: Análisis de Precios de Acciones de AAPL")
+st.subheader("Proyecto final: Análisis de Precios de Acciones de Apple Inc., AAPL")
 st.write("Nombre: Javier Horacio Pérez Ricárdez")
 
 # Mantener el estado de las fechas y el ComboBox
