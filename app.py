@@ -48,7 +48,7 @@ st.sidebar.write("Fecha: Octubre del 2024")
 #st.set_page_config(page_title="Proyecto Final", layout="wide")
 
 # Título de la aplicación
-st.title("Visor de PDF en Streamlit")
+#st.title("Visor de PDF en Streamlit")
 
 # Ruta del archivo PDF
 pdf_file_path = "proyecto-final1.pdf"  # Cambia esto a la ruta de tu archivo PDF
