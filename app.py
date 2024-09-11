@@ -22,7 +22,7 @@ st.header("Proyecto Final")
 #st.write("Descripción breve del proyecto final y su objetivo.")
 
 # Sección de análisis de precios de acciones de AAPL
-st.header("Análisis de Precios de Acciones de AAPL")
+st.header("Análisis de Precios de Acciones de Apple Inc., AAPL")
 #st.write("Aquí puedes incluir un análisis detallado de los precios de las acciones de AAPL.")
 
 # Información adicional
