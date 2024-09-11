@@ -50,7 +50,7 @@ st.markdown(
     <iframe src="{pdf_path}" width="700" height="1000" type="application/pdf"></iframe>
     """,
     unsafe_allow_html=True
-
+)
 
 
 
