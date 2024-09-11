@@ -6,6 +6,8 @@ Created on Fri Sep  6 17:10:57 2024
 """   
 
 import streamlit as st
+import base64
+
 
 # Configuración de la página
 st.set_page_config(page_title="Proyecto Final", layout="wide")
@@ -41,16 +43,23 @@ st.sidebar.write("Fecha: Octubre del 2024")
 # Instrucciones para el usuario
 #st.write("Navega a través de las secciones en el menú lateral para explorar más sobre el proyecto.")
 
-# Ruta del archivo PDF
-pdf_path = 'pages/proyecto-final1.pdf'
 
-# Usar st.markdown para embeber el PDF en un iframe
-st.markdown(
-    f"""
-    <iframe src="{pdf_path}" width="700" height="1000" type="application/pdf"></iframe>
-    """,
-    unsafe_allow_html=True
-)
+
+
+# Título de la aplicación
+st.title("Visor de PDF en Streamlit")
+
+# Ruta del archivo PDF
+pdf_file_path = "proyecto-final1.pdf"  # Cambia esto a la ruta de tu archivo PDF
+
+# Leer el archivo PDF
+with open(pdf_file_path, "rb") as pdf_file:
+    pdf_bytes = pdf_file.read()
+
+# Mostrar el PDF en un iframe
+pdf_base64 = base64.b64encode(pdf_bytes).decode("utf-8")
+pdf_display = f'<iframe src="data:application/pdf;base64,{pdf_base64}" width="700" height="500" type="application/pdf"></iframe>'
+st.markdown(pdf_display, unsafe_allow_html=True)
 
 
 
