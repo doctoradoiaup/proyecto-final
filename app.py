@@ -42,7 +42,7 @@ st.sidebar.write("Fecha: Octubre del 2024")
 #st.write("Navega a través de las secciones en el menú lateral para explorar más sobre el proyecto.")
 
 # Ruta del archivo PDF
-pdf_path = 'proyecto-final.pdf'
+pdf_path = 'proyecto-final1.pdf'
 
 # Usar st.markdown para embeber el PDF en un iframe
 st.markdown(
