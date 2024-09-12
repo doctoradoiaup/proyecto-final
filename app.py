@@ -51,7 +51,7 @@ st.sidebar.write("Fecha: Octubre del 2024")
 #st.title("Visor de PDF en Streamlit")
 
 # Ruta del archivo PDF
-pdf_file_path = "proyecto-final1.pdf"  # Cambia esto a la ruta de tu archivo PDF
+pdf_file_path = "proyecto-final-2.pdf"  # Cambia esto a la ruta de tu archivo PDF
 
 # Leer el archivo PDF
 with open(pdf_file_path, "rb") as pdf_file:
