@@ -59,7 +59,7 @@ with open(pdf_file_path, "rb") as pdf_file:
 
 # Ofrecer la descarga del archivo PDF
 b64_pdf = base64.b64encode(pdf_bytes).decode("utf-8")
-href = f'<a href="data:application/octet-stream;base64,{b64_pdf}" download="proyecto-final1.pdf">Descargar PDF</a>'
+href = f'<a href="data:application/octet-stream;base64,{b64_pdf}" download="proyecto-final-2.pdf">Descargar PDF</a>'
 st.markdown(href, unsafe_allow_html=True)
 
 
