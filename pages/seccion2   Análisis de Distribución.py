@@ -67,7 +67,7 @@ confidence_interval = (sample_mean - margin_of_error, sample_mean + margin_of_er
 # Mostrar resultados
 st.write("Muestra de datos:")
 st.write(sample_df)
-st.write(f"Intervalo de confianza del 95% para la media de la muestra: {confidence_interval}")
+st.write(f"Intervalo de confianza del 95% para la media de la muestra: float{confidence_interval}")
 
 # b) Inferencias basadas en dos muestras
 st.subheader("b) Inferencias Basadas en Dos Muestras")
