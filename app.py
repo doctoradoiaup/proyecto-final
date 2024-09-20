@@ -30,7 +30,7 @@ st.header("Análisis de Precios de Acciones de Apple Inc., AAPL")
 # Información adicional
 st.sidebar.header("Información Adicional")
 st.sidebar.write("Nombre: Javier Horacio Pérez Ricárdez")
-st.sidebar.write("Catedrático: Gabriela Macías Esquivel")
+st.sidebar.write("Catedrática: Gabriela Macías Esquivel")
 st.sidebar.write("Fecha: Octubre del 2024")
 
 # Despliegue de otras secciones
