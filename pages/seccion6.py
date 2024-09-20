@@ -23,7 +23,7 @@ st.title("Estadística para la investigación")
 st.subheader("Proyecto final: Análisis de Precios de Acciones de AAPL")
 st.write("Nombre: Javier Horacio Pérez Ricárdez")
 
-st.subheader("Sección VI.- Análisis de Precios de Acciones de AAPL usando ANOVA y LSD")
+st.subheader("Sección VI.- ANOVA y LSD para prueba de hipótesis de un factor con más de 2 grupos")
 
 st.write("""
     Esta aplicación permite seleccionar muestras de precios de acciones de AAPL en diferentes rangos de fechas,
