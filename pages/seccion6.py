@@ -16,7 +16,7 @@ from statsmodels.formula.api import ols
 from statsmodels.stats.multicomp import MultiComparison
 
 # Título de la aplicación
-#st.title("Análisis de Precios de Acciones de AAPL usando ANOVA y LSD")
+#st.title("ANOVA y LSD para prueba de hipótesis de un factor con más de 2 grupos")
 
 
 st.title("Estadística para la investigación")
