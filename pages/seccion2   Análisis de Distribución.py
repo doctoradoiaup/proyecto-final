@@ -54,6 +54,22 @@ sample_data = data['Close'].sample(n=sample_size, random_state=42)  # Tomar una 
 sample_df = pd.DataFrame(sample_data).reset_index(drop=True)
 
 # Calcular media y desviación estándar
+#sample_mean = sample_df.mean()[0]
+#sample_std = sample_df.std()[0]
+
+## Calcular el intervalo de confianza del 95%
+#confidence_level = 0.95
+#alpha = 1 - confidence_level
+#critical_value = stats.t.ppf(1 - alpha / 2, df=sample_size - 1)
+#margin_of_error = critical_value * (sample_std / np.sqrt(sample_size))
+#confidence_interval = (sample_mean - margin_of_error, sample_mean + margin_of_error)
+
+## Mostrar resultados
+#st.write("Muestra de datos:")
+#st.write(sample_df)
+#st.write(f"Intervalo de confianza del 95% para la media de la muestra: {confidence_interval}")
+
+# Calcular media y desviación estándar
 sample_mean = sample_df.mean()[0]
 sample_std = sample_df.std()[0]
 
@@ -62,12 +78,15 @@ confidence_level = 0.95
 alpha = 1 - confidence_level
 critical_value = stats.t.ppf(1 - alpha / 2, df=sample_size - 1)
 margin_of_error = critical_value * (sample_std / np.sqrt(sample_size))
-confidence_interval = (sample_mean - margin_of_error, sample_mean + margin_of_error)
+confidence_interval = (float(sample_mean - margin_of_error), float(sample_mean + margin_of_error))  # Convertir a float
 
 # Mostrar resultados
 st.write("Muestra de datos:")
 st.write(sample_df)
-st.write(f"Intervalo de confianza del 95% para la media de la muestra: float{confidence_interval}")
+st.write(f"Intervalo de confianza del 95% para la media de la muestra: {confidence_interval}")
+
+
+
 
 # b) Inferencias basadas en dos muestras
 st.subheader("b) Inferencias Basadas en Dos Muestras")
