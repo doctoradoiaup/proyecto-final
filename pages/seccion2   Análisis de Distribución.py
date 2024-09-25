@@ -40,8 +40,6 @@ data.reset_index(inplace=True)
 st.subheader("Datos Descargados")
 st.write(data)
 
-
-
 # Sección II.- Análisis de Distribución
 st.subheader("Sección II.- Análisis de Distribución")
 
@@ -50,43 +48,24 @@ st.subheader("a) Intervalos Estadísticos Basados en una Sola Muestra")
 
 # Definir la muestra
 sample_size = 30  # Tamaño de la muestra
-sample_data = data['Close'].sample(n=sample_size, random_state=42)  # Tomar una muestra aleatoria
-sample_df = pd.DataFrame(sample_data).reset_index(drop=True)
+sample_data = data[['Date', 'Close']].sample(n=sample_size, random_state=42)  # Tomar una muestra aleatoria
+sample_df = sample_data.reset_index(drop=True)
 
 # Calcular media y desviación estándar
-#sample_mean = sample_df.mean()[0]
-#sample_std = sample_df.std()[0]
-
-## Calcular el intervalo de confianza del 95%
-#confidence_level = 0.95
-#alpha = 1 - confidence_level
-#critical_value = stats.t.ppf(1 - alpha / 2, df=sample_size - 1)
-#margin_of_error = critical_value * (sample_std / np.sqrt(sample_size))
-#confidence_interval = (sample_mean - margin_of_error, sample_mean + margin_of_error)
-
-## Mostrar resultados
-#st.write("Muestra de datos:")
-#st.write(sample_df)
-#st.write(f"Intervalo de confianza del 95% para la media de la muestra: {confidence_interval}")
-
-# Calcular media y desviación estándar
-sample_mean = sample_df.mean()[0]
-sample_std = sample_df.std()[0]
+sample_mean = sample_df['Close'].mean()
+sample_std = sample_df['Close'].std()
 
 # Calcular el intervalo de confianza del 95%
 confidence_level = 0.95
 alpha = 1 - confidence_level
 critical_value = stats.t.ppf(1 - alpha / 2, df=sample_size - 1)
 margin_of_error = critical_value * (sample_std / np.sqrt(sample_size))
-confidence_interval = (float(sample_mean - margin_of_error), float(sample_mean + margin_of_error))  # Convertir a float
+confidence_interval = (sample_mean - margin_of_error, sample_mean + margin_of_error)
 
 # Mostrar resultados
 st.write("Muestra de datos:")
 st.write(sample_df)
 st.write(f"Intervalo de confianza del 95% para la media de la muestra: {confidence_interval}")
-
-
-
 
 # b) Inferencias basadas en dos muestras
 st.subheader("b) Inferencias Basadas en Dos Muestras")
@@ -96,12 +75,12 @@ sample_size_1 = 30
 sample_size_2 = 30
 
 # Muestra 1
-sample_1 = data['Close'].sample(n=sample_size_1, random_state=42)
-sample_1_df = pd.DataFrame(sample_1).reset_index(drop=True)
+sample_1 = data[['Date', 'Close']].sample(n=sample_size_1, random_state=42)
+sample_1_df = sample_1.reset_index(drop=True)
 
 # Muestra 2
-sample_2 = data['Close'].sample(n=sample_size_2, random_state=43)
-sample_2_df = pd.DataFrame(sample_2).reset_index(drop=True)
+sample_2 = data[['Date', 'Close']].sample(n=sample_size_2, random_state=43)
+sample_2_df = sample_2.reset_index(drop=True)
 
 # Mostrar las muestras
 st.write("Muestra 1:")
@@ -114,7 +93,7 @@ st.write("Hipótesis nula (Ho): Las medias de las dos muestras son iguales.")
 st.write("Hipótesis alternativa (Ha): Las medias de las dos muestras son diferentes.")
 
 # Realizar la prueba t para dos muestras
-t_stat, p_value = stats.ttest_ind(sample_1, sample_2)
+t_stat, p_value = stats.ttest_ind(sample_1['Close'], sample_2['Close'])
 
 # Calcular grados de libertad
 df = sample_size_1 + sample_size_2 - 2
@@ -138,35 +117,28 @@ else:
     st.write("Esto sugiere que no hay evidencia suficiente para afirmar que las medias de las dos muestras son diferentes.")
     st.write("Justificación: t < t crítico, lo que indica que la diferencia observada entre las muestras no es suficiente para ser considerada estadísticamente significativa.")
 
-
-
 # c) Análisis de varianza (ANOVA)
 st.subheader("c) Análisis de Varianza (ANOVA)")
 
 # Crear muestras aleatorias de 'data'
-group_a = data['Close'].sample(n=30, random_state=1).reset_index(drop=True)
-group_b = data['Close'].sample(n=30, random_state=2).reset_index(drop=True)
-group_c = data['Close'].sample(n=30, random_state=3).reset_index(drop=True)
-
-# Crear DataFrames para los grupos A, B y C
-df_a = pd.DataFrame({'A': group_a})
-df_b = pd.DataFrame({'B': group_b})
-df_c = pd.DataFrame({'C': group_c})
+group_a = data[['Date', 'Close']].sample(n=30, random_state=1).reset_index(drop=True)
+group_b = data[['Date', 'Close']].sample(n=30, random_state=2).reset_index(drop=True)
+group_c = data[['Date', 'Close']].sample(n=30, random_state=3).reset_index(drop=True)
 
 # Mostrar los DataFrames en la aplicación
 st.subheader("Muestra del Grupo A")
-st.dataframe(df_a)
+st.dataframe(group_a)
 
 st.subheader("Muestra del Grupo B")
-st.dataframe(df_b)
+st.dataframe(group_b)
 
 st.subheader("Muestra del Grupo C")
-st.dataframe(df_c)
+st.dataframe(group_c)
 
 # Tabular los grupos y sus medias
 group_means = pd.DataFrame({
     'Grupo': ['A', 'B', 'C'],
-    'Media': [group_a.mean(), group_b.mean(), group_c.mean()]
+    'Media': [group_a['Close'].mean(), group_b['Close'].mean(), group_c['Close'].mean()]
 })
 st.subheader("Medias de los Grupos")
 st.dataframe(group_means)
@@ -174,11 +146,11 @@ st.dataframe(group_means)
 # Crear un DataFrame combinado para ANOVA
 anova_data = pd.DataFrame({
     'Group': ['A'] * 30 + ['B'] * 30 + ['C'] * 30,
-    'Values': np.concatenate([group_a, group_b, group_c])
+    'Values': np.concatenate([group_a['Close'], group_b['Close'], group_c['Close']])
 })
 
 # Realizar el ANOVA
-f_statistic, p_value = stats.f_oneway(group_a, group_b, group_c)
+f_statistic, p_value = stats.f_oneway(group_a['Close'], group_b['Close'], group_c['Close'])
 
 # Definir hipótesis nula y alternativa
 st.write("Hipótesis nula (Ho): No hay diferencias significativas entre los grupos.")
@@ -207,78 +179,3 @@ if f_statistic > f_critical:
 else:
     st.write("No rechazamos la hipótesis nula (Ho).")
     st.write("Esto sugiere que no hay evidencia suficiente para afirmar que las medias de los grupos son diferentes.")
-    
-    
-    
-# d) Análisis de Varianza con Factores Múltiples (ANOVA de dos vías)
-st.subheader("d) Análisis de Varianza con Factores Múltiples (ANOVA de Dos Vías)")
-
-# Añadir columnas 'Month' y 'Day_of_week' a los datos para utilizar como factores
-data['Month'] = data['Date'].dt.month
-data['Day_of_week'] = data['Date'].dt.dayofweek
-
-# Visualizar los datos con las nuevas columnas
-st.write("Datos con los factores 'Mes' y 'Día de la Semana':")
-st.write(data[['Date', 'Close', 'Month', 'Day_of_week']])
-
-# Realizar el ANOVA de dos vías usando statsmodels
-# Definir el modelo utilizando 'Month' y 'Day_of_week' como factores
-formula = 'Close ~ C(Month) + C(Day_of_week) + C(Month):C(Day_of_week)'
-model = ols(formula, data=data).fit()
-
-# Realizar el ANOVA
-anova_table = sm.stats.anova_lm(model, typ=2)
-
-# Calcular F crítico
-alpha = 0.05
-df_between = 2  # Grados de libertad entre grupos (número de grupos - 1)
-df_within = len(data) - anova_table.shape[0]  # Grados de libertad dentro de los grupos
-
-# Calcular F crítico para el ANOVA
-f_critical = stats.f.ppf(1 - alpha, df_between, df_within)
-
-# Agregar la columna F crítico a anova_table
-anova_table['F crítico'] = f_critical
-
-# Mostrar resultados del ANOVA de dos vías
-st.write("Resultados del ANOVA de Dos Vías:")
-st.write(anova_table)
-
-# Interpretar los resultados del ANOVA de Dos Vías
-st.subheader("Interpretación Detallada del ANOVA de Dos Vías")
-
-# Comparar los valores de F con F crítico
-if anova_table.loc['C(Month)', 'F'] > f_critical:
-    st.write("El factor 'Mes' tiene un efecto significativo sobre el precio de cierre (F > F crítico).")
-else:
-    st.write("El factor 'Mes' no tiene un efecto significativo sobre el precio de cierre (F <= F crítico).")
-
-if anova_table.loc['C(Day_of_week)', 'F'] > f_critical:
-    st.write("El factor 'Día de la semana' tiene un efecto significativo sobre el precio de cierre (F > F crítico).")
-else:
-    st.write("El factor 'Día de la semana' no tiene un efecto significativo sobre el precio de cierre (F <= F crítico).")
-
-if anova_table.loc['C(Month):C(Day_of_week)', 'F'] > f_critical:
-    st.write("Hay una interacción significativa entre 'Mes' y 'Día de la semana' que afecta al precio de cierre (F > F crítico).")
-else:
-    st.write("No se observa una interacción significativa entre 'Mes' y 'Día de la semana' que afecte al precio de cierre (F <= F crítico).")
-
-# Comparar los valores de F con F crítico
-st.subheader("Comparación de Estadísticas F con F Crítico")
-for index, row in anova_table.iterrows():
-    if row['F'] > f_critical:
-        st.write(f"Rechazamos la hipótesis nula para el efecto {index}. Esto sugiere que hay una diferencia significativa.")
-    else:
-        st.write(f"No rechazamos la hipótesis nula para el efecto {index}. Esto sugiere que no hay evidencia suficiente para afirmar que hay una diferencia significativa.")
-
-# Resumen final de los resultados
-st.subheader("Resumen Final del ANOVA de Dos Vías")
-if anova_table['F'].max() > f_critical:
-    st.write("Al menos uno de los factores o su interacción tiene un efecto significativo en el precio de cierre.")
-else:
-    st.write("Ninguno de los factores ni su interacción tienen un efecto significativo en el precio de cierre.")
-
-
-
-
-
