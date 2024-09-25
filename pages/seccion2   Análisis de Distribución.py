@@ -62,6 +62,9 @@ critical_value = stats.t.ppf(1 - alpha / 2, df=sample_size - 1)
 margin_of_error = critical_value * (sample_std / np.sqrt(sample_size))
 confidence_interval = (sample_mean - margin_of_error, sample_mean + margin_of_error)
 
+# Convertir a float antes de mostrar
+confidence_interval = (float(confidence_interval[0]), float(confidence_interval[1]))
+
 # Mostrar resultados
 st.write("Muestra de datos:")
 st.write(sample_df)
