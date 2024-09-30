@@ -40,9 +40,9 @@ st.write(data)
 # Sección IV: Análisis de datos categóricos
 st.subheader("Sección IV.- Análisis de datos categóricos: Precios de Acciones de AAPL")
 
-# Mostrar los primeros datos
+# Mostrar todos los datos históricos según las fechas seleccionadas
 st.subheader("Datos históricos de AAPL")
-st.dataframe(data.head())
+st.dataframe(data)  # Mostrar todos los datos
 
 # a) Identificación de variables
 st.subheader("a) Identificación de Variables")
@@ -65,9 +65,14 @@ Para analizar la variabilidad del precio de las acciones de AAPL, definimos las 
 - **Alto**: Si el precio de cierre está por encima del percentil 66.
 """)
 
-# Crear una nueva columna categórica en función de los percentiles
+
+# Calcular los percentiles 33 y 66
 percentile_33 = np.percentile(data['Close'], 33)
 percentile_66 = np.percentile(data['Close'], 66)
+
+# Mostrar los valores de los percentiles 33 y 66
+st.write(f"El valor del percentil 33 es: {percentile_33:.2f}")
+st.write(f"El valor del percentil 66 es: {percentile_66:.2f}")
 
 def categorize_price(row):
     if row['Close'] < percentile_33:
@@ -79,13 +84,20 @@ def categorize_price(row):
 
 data['Precio_Categorizado'] = data.apply(categorize_price, axis=1)
 
-# Mostrar el DataFrame con la nueva columna
+# Mostrar todos los datos categorizados según las fechas seleccionadas
 st.write("Precios categorizados según percentiles:")
-st.dataframe(data[['Date', 'Close', 'Precio_Categorizado']].head())
+st.dataframe(data[['Date', 'Close', 'Precio_Categorizado']])  # Mostrar todos los datos categorizados
 
 # c) Análisis con variables múltiples
-st.subheader("c) Análisis con Variables Múltiples")
-st.write("Realizamos un análisis cruzado entre las variables categorizadas y otras variables financieras.")
+# c) Análisis de la distribución del volumen en relación con las categorías de precios
+
+# c) Análisis de la distribución del volumen en relación con las categorías de precios
+
+# Categorización de los precios
+percentile_33 = np.percentile(data['Close'], 33)
+percentile_66 = np.percentile(data['Close'], 66)
+data['Precio_Categorizado'] = pd.cut(data['Close'], bins=[-np.inf, percentile_33, percentile_66, np.inf],
+                                      labels=['Bajo', 'Medio', 'Alto'])
 
 # Analizando la distribución de volumen por categoría de precio
 st.write("Distribución del volumen por categoría de precio:")
@@ -95,6 +107,57 @@ plt.title("Distribución de Volumen por Categoría de Precio")
 st.pyplot(plt)  # Mostrar la figura
 plt.clf()  # Limpiar la figura
 
+# Cálculo de estadísticas del boxplot
+stats = data.groupby('Precio_Categorizado')['Volume'].describe()
+st.write("Estadísticas del Volumen por Categoría de Precio:")
+st.write(stats)
+
+# Explicación y cálculos adicionales
+st.write("""
+**Cálculos y Procesos:**
+
+1. **Categorización de Precios:**
+   - Las categorías de precios se establecen basándose en los percentiles 33 y 66. Esto significa que:
+     - Los precios de cierre por debajo del **percentil 33** se clasifican como **Bajo**.
+     - Los precios de cierre entre el **percentil 33** y el **percentil 66** se clasifican como **Medio**.
+     - Los precios de cierre por encima del **percentil 66** se clasifican como **Alto**.
+
+2. **Cálculo de los Percentiles:**
+   - Los percentiles se calculan utilizando la función `np.percentile()`. Por ejemplo:
+     ```python
+     percentile_33 = np.percentile(data['Close'], 33)
+     percentile_66 = np.percentile(data['Close'], 66)
+     ```
+   - Esto nos permite determinar los valores críticos que dividen el conjunto de datos en las tres categorías.
+
+3. **Boxplot (Diagrama de Caja):**
+   - El boxplot proporciona una representación visual de la distribución del volumen de transacciones en cada categoría de precios. Los elementos clave son:
+     - **Caja**: Representa el rango intercuartílico (IQR), que muestra dónde se encuentra el 50% central de los datos. 
+       - Valor mínimo de la caja (Q1): {:.2f}
+       - Valor máximo de la caja (Q3): {:.2f}
+     - **Mediana**: La línea dentro de la caja representa la mediana del volumen de acciones negociadas. 
+       - Mediana: {:.2f}
+     - **Bigotes**: Se extienden hasta el valor mínimo y máximo dentro de 1.5 veces el IQR, indicando el rango general de los datos sin outliers. 
+       - Valor mínimo: {:.2f}
+       - Valor máximo: {:.2f}
+     - **Outliers**: Los puntos fuera de los bigotes son considerados outliers, indicando volúmenes de transacciones inusuales.
+
+4. **Análisis de Resultados:**
+   - Al observar el gráfico, se pueden hacer varias inferencias:
+     - **Volumen Alto vs Bajo**: Si la caja correspondiente a la categoría **Alto** es significativamente más alta que la de **Bajo**, esto sugiere que los precios más altos están asociados con un mayor volumen de transacciones.
+     - **Tendencias en el Volumen**: Cualquier diferencia notable en las alturas de las cajas puede indicar cómo las categorías de precios afectan el volumen de negociación.
+     - **Presencia de Outliers**: La cantidad de outliers en cada categoría también es informativa; por ejemplo, un número elevado de outliers en la categoría **Alto** podría indicar eventos extraordinarios que afectan el volumen de negociación.
+
+5. **Conclusión**:
+   - Este análisis nos ayuda a entender mejor cómo el volumen de negociación de AAPL varía según las diferentes categorías de precios, lo que es fundamental para la toma de decisiones informadas en el mercado de valores.
+""".format(
+    stats.loc['Bajo', '25%'],  # Valor mínimo de la caja
+    stats.loc['Bajo', '75%'],  # Valor máximo de la caja
+    stats.loc['Bajo', '50%'],  # Mediana
+    stats.loc['Bajo', 'min'],   # Valor mínimo
+    stats.loc['Bajo', 'max']    # Valor máximo
+))
+
 # Análisis de la relación entre el volumen y el precio categorizado
 st.write("Relación entre el volumen y las categorías de precio:")
 plt.figure(figsize=(10, 5))
@@ -102,6 +165,16 @@ sns.scatterplot(x='Close', y='Volume', hue='Precio_Categorizado', data=data)
 plt.title("Scatterplot de Precio vs Volumen con Categorías")
 st.pyplot(plt)  # Mostrar la figura
 plt.clf()  # Limpiar la figura
+
+# d) Contar datos por categorías de percentiles
+st.subheader("d) Conteo de datos según las categorías de precios")
+# Crear un DataFrame con los conteos
+conteo_categorias = data['Precio_Categorizado'].value_counts().reset_index()
+conteo_categorias.columns = ['Categoría de Precio', 'Conteo']
+
+# Mostrar el DataFrame con los conteos
+st.write("Conteo de datos según la categoría de precios:")
+st.dataframe(conteo_categorias)
 
 # Conclusiones
 st.subheader("Conclusiones")
