@@ -34,11 +34,21 @@ st.session_state.end_date = st.date_input("Selecciona la fecha de fin", st.sessi
 # Descargar datos de Yahoo Finance
 ticker = "AAPL"
 data = yf.download(ticker, start=st.session_state.start_date, end=st.session_state.end_date)
-data.reset_index(inplace=True)
+
+# Asegurarse de que el índice sea de tipo 'DatetimeIndex'
+if not pd.api.types.is_datetime64_any_dtype(data.index):
+    data.index = pd.to_datetime(data.index)
+
+# Remover la localización de la zona horaria si existe
+data.index = data.index.tz_localize(None)
+
+# Restablecer el índice si necesitas una columna de fecha
+data = data.reset_index()  # Esto moverá el índice de fechas a una columna llamada 'Date'
 
 # Mostrar datos descargados
 st.subheader("Datos Descargados")
 st.write(data)
+
 
 # Sección II.- Análisis de Distribución
 st.subheader("Sección II.- Análisis de Distribución")
@@ -70,6 +80,19 @@ st.write("Muestra de datos:")
 st.write(sample_df)
 st.write(f"Intervalo de confianza del 95% para la media de la muestra: {confidence_interval}")
 
+# Gráfico para visualizar el intervalo de confianza
+st.subheader("Gráfico de Intervalo de Confianza para la Media de la Muestra")
+plt.figure(figsize=(10, 6))
+plt.plot(sample_df['Date'], sample_df['Close'], label="Precio de cierre")
+plt.axhline(sample_mean, color='r', linestyle='--', label=f"Media: {sample_mean:.2f}")
+plt.fill_between(sample_df['Date'], confidence_interval[0], confidence_interval[1], color='b', alpha=0.2, label=f"Intervalo de Confianza {confidence_level * 100}%")
+plt.xlabel("Fecha")
+plt.ylabel("Precio de cierre")
+plt.legend()
+st.pyplot(plt)
+
+
+
 # b) Inferencias basadas en dos muestras
 st.subheader("b) Inferencias Basadas en Dos Muestras")
 
@@ -90,6 +113,24 @@ st.write("Muestra 1:")
 st.write(sample_1_df)
 st.write("Muestra 2:")
 st.write(sample_2_df)
+
+# Calcular las medias de las muestras
+mean_sample_1 = sample_1_df['Close'].mean()
+mean_sample_2 = sample_2_df['Close'].mean()
+
+# Mostrar los valores de las medias antes del gráfico
+st.subheader("Medias de las dos muestras")
+st.write(f"Media de la muestra 1: {mean_sample_1:.2f}")
+st.write(f"Media de la muestra 2: {mean_sample_2:.2f}")
+
+# Generar el gráfico de las medias de las dos muestras
+fig, ax = plt.subplots()
+ax.bar(['Muestra 1', 'Muestra 2'], [mean_sample_1, mean_sample_2], color=['blue', 'green'])
+ax.set_ylabel('Precio de Cierre')
+ax.set_title('Comparación de Medias entre las Dos Muestras')
+
+# Mostrar el gráfico en Streamlit
+st.pyplot(fig)
 
 # Definir hipótesis nula y alternativa
 st.write("Hipótesis nula (Ho): Las medias de las dos muestras son iguales.")
@@ -119,6 +160,8 @@ else:
     st.write("No rechazamos la hipótesis nula (Ho).")
     st.write("Esto sugiere que no hay evidencia suficiente para afirmar que las medias de las dos muestras son diferentes.")
     st.write("Justificación: t < t crítico, lo que indica que la diferencia observada entre las muestras no es suficiente para ser considerada estadísticamente significativa.")
+
+
 
 # c) Análisis de varianza (ANOVA)
 st.subheader("c) Análisis de Varianza (ANOVA)")
@@ -178,7 +221,15 @@ st.subheader("Conclusión del ANOVA")
 # Comparar F y F crítico para aceptar o rechazar Ho
 if f_statistic > f_critical:
     st.write("Rechazamos la hipótesis nula (Ho).")
-    st.write("Esto sugiere que hay diferencias significativas entre los grupos.")
+    st.write("Esto sugiere que hay una diferencia significativa entre al menos dos de los grupos.")
 else:
     st.write("No rechazamos la hipótesis nula (Ho).")
-    st.write("Esto sugiere que no hay evidencia suficiente para afirmar que las medias de los grupos son diferentes.")
+    st.write("Esto sugiere que no hay evidencia suficiente para afirmar que hay diferencias significativas entre los grupos.")
+
+# Gráfico de barras comparando las medias de los tres grupos
+st.subheader("Gráfico Comparativo de las Medias de los Tres Grupos")
+plt.figure(figsize=(8, 6))
+plt.bar(group_means['Grupo'], group_means['Media'], color=['blue', 'green', 'red'])
+plt.ylabel("Precio de cierre promedio")
+plt.title("Comparación de Medias entre los Grupos A, B y C")
+st.pyplot(plt)
