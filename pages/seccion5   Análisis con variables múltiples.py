@@ -9,6 +9,8 @@ import streamlit as st
 import yfinance as yf
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Título de la aplicación
 st.title("Estadística para la investigación")
@@ -35,16 +37,45 @@ data.reset_index(inplace=True)
 st.subheader("Datos Descargados")
 st.write(data)
 
-
 # Sección IV: Análisis con variables múltiples
 st.subheader("Sección V.- Análisis con variables múltiples")
-
-# Calcular probabilidades conjuntas
-st.subheader("Probabilidades Conjuntas")
 
 # Definir los rangos de interés para el precio de apertura (X) y el precio de cierre (Y)
 x_min, x_max = st.slider('Selecciona el rango de Precio de Apertura (X)', float(data['Open'].min()), float(data['Open'].max()), (float(data['Open'].min()), float(data['Open'].max())))
 y_min, y_max = st.slider('Selecciona el rango de Precio de Cierre (Y)', float(data['Close'].min()), float(data['Close'].max()), (float(data['Close'].min()), float(data['Close'].max())))
+
+# Gráfico de dispersión
+st.subheader("Gráfico de Dispersión")
+fig, ax = plt.subplots()
+ax.scatter(data['Open'], data['Close'], alpha=0.5)
+ax.axhline(y=y_min, color='r', linestyle='--', label='Límite Inferior Y')
+ax.axhline(y=y_max, color='r', linestyle='--', label='Límite Superior Y')
+ax.axvline(x=x_min, color='g', linestyle='--', label='Límite Inferior X')
+ax.axvline(x=x_max, color='g', linestyle='--', label='Límite Superior X')
+ax.set_xlabel("Precio de Apertura (X)")
+ax.set_ylabel("Precio de Cierre (Y)")
+ax.set_title("Gráfico de Dispersión de Precios")
+ax.legend()
+st.pyplot(fig)
+
+# Gráfico de densidad (superficie de densidad)
+st.subheader("Superficie de Densidad")
+fig, ax = plt.subplots()
+sns.kdeplot(x=data['Open'], y=data['Close'], fill=True, ax=ax, cmap='Blues', thresh=0, levels=20)
+
+# Actualizar las líneas con los valores de los sliders
+ax.axhline(y=y_min, color='r', linestyle='--', label='Límite Inferior Y')
+ax.axhline(y=y_max, color='r', linestyle='--', label='Límite Superior Y')
+ax.axvline(x=x_min, color='g', linestyle='--', label='Límite Inferior X')
+ax.axvline(x=x_max, color='g', linestyle='--', label='Límite Superior X')
+ax.set_xlabel("Precio de Apertura (X)")
+ax.set_ylabel("Precio de Cierre (Y)")
+ax.set_title("Superficie de Densidad de Precios")
+ax.legend()
+st.pyplot(fig)
+
+# Cálculo de probabilidades
+st.subheader("Probabilidades Conjuntas")
 
 # i) Probabilidad conjunta P(X en [x_min, x_max] y Y en [y_min, y_max])
 prob_joint = np.mean((data['Open'] >= x_min) & (data['Open'] <= x_max) & (data['Close'] >= y_min) & (data['Close'] <= y_max))
@@ -60,56 +91,6 @@ y2_min, y2_max = st.slider('Selecciona un segundo rango de Precio de Cierre (Y �
 
 prob_non_equal_ranges = np.mean((data['Open'] >= x2_min) & (data['Open'] <= x2_max) & (data['Close'] >= y2_min) & (data['Close'] <= y2_max))
 st.write(f"P(X en [{x2_min:.2f}, {x2_max:.2f}] y Y en [{y2_min:.2f}, {y2_max:.2f}] ≠) = {prob_non_equal_ranges:.4f}")
-
-# Sección de valores esperados, covarianza y correlación
-st.subheader("Valores Esperados, Covarianza y Correlación")
-
-# a) Valores esperados
-expected_open = np.mean(data['Open'])
-expected_close = np.mean(data['Close'])
-
-st.write(f"Valor Esperado del Precio de Apertura: {expected_open:.2f}")
-st.write(f"Valor Esperado del Precio de Cierre: {expected_close:.2f}")
-
-# b) Covarianza
-covariance = np.cov(data['Open'], data['Close'])[0][1]
-st.write(f"Covarianza entre Precio de Apertura y Precio de Cierre: {covariance:.2f}")
-
-# c) Correlación
-correlation = np.corrcoef(data['Open'], data['Close'])[0][1]
-st.write(f"Correlación entre Precio de Apertura y Precio de Cierre: {correlation:.2f}")
-
-# Sección de cálculo de E[XY] y Var[XY] usando dobles sumas
-st.subheader("Cálculo de E[XY] y Var[XY]")
-
-# Calcular la distribución conjunta usando histogramas bidimensionales
-X = data['Open'].dropna().to_numpy()
-Y = data['Close'].dropna().to_numpy()
-
-# Crear histograma bidimensional para aproximar la función de masa de probabilidad conjunta
-joint_probs, x_edges, y_edges = np.histogram2d(X, Y, bins=20, density=True)
-
-# Anchos de los bins
-dx = np.diff(x_edges)
-dy = np.diff(y_edges)
-
-# Cálculo de E[XY]
-E_XY = 0
-for i in range(len(x_edges) - 1):
-    for j in range(len(y_edges) - 1):
-        E_XY += joint_probs[i, j] * x_edges[i] * y_edges[j] * dx[i] * dy[j]
-
-st.write(f"Valor Esperado E[XY]: {E_XY:.4f}")
-
-# Cálculo de E[(XY)^2]
-E_XY2 = 0
-for i in range(len(x_edges) - 1):
-    for j in range(len(y_edges) - 1):
-        E_XY2 += joint_probs[i, j] * (x_edges[i] * y_edges[j]) ** 2 * dx[i] * dy[j]
-
-# Cálculo de la varianza Var(XY)
-var_XY = E_XY2 - E_XY ** 2
-st.write(f"Varianza Var[XY]: {var_XY:.4f}")
 
 # Mostrar los datos utilizados para el análisis
 st.write("Datos de entrada utilizados para el análisis:")
