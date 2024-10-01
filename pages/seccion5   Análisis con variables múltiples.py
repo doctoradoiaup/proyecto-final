@@ -40,7 +40,7 @@ st.write(data)
 # Sección IV: Análisis con variables múltiples
 st.subheader("Sección V.- Análisis con variables múltiples")
 
-# Definir los rangos de interés para el precio de apertura (X) y el precio de cierre (Y)
+# Definir los rangos de interés para el precio de apertura (X) y el precio de cierre (Y) usando dos sliders
 x_min, x_max = st.slider('Selecciona el rango de Precio de Apertura (X)', float(data['Open'].min()), float(data['Open'].max()), (float(data['Open'].min()), float(data['Open'].max())))
 y_min, y_max = st.slider('Selecciona el rango de Precio de Cierre (Y)', float(data['Close'].min()), float(data['Close'].max()), (float(data['Close'].min()), float(data['Close'].max())))
 
@@ -85,12 +85,22 @@ st.write(f"P(X en [{x_min:.2f}, {x_max:.2f}] y Y en [{y_min:.2f}, {y_max:.2f}]) 
 prob_close_gt_open = np.mean(data['Close'] > data['Open'])
 st.write(f"P(Y > X) = {prob_close_gt_open:.4f}")
 
-# iii) Probabilidad de que el precio de apertura y cierre no coincidan en rangos
-x2_min, x2_max = st.slider('Selecciona un segundo rango de Precio de Apertura (X ≠ Y)', float(data['Open'].min()), float(data['Open'].max()), (float(data['Open'].min()), float(data['Open'].max())))
-y2_min, y2_max = st.slider('Selecciona un segundo rango de Precio de Cierre (Y ≠ X)', float(data['Close'].min()), float(data['Close'].max()), (float(data['Close'].min()), float(data['Close'].max())))
+# Sección de valores esperados, covarianza y correlación
+st.subheader("Valores Esperados, Covarianza y Correlación")
 
-prob_non_equal_ranges = np.mean((data['Open'] >= x2_min) & (data['Open'] <= x2_max) & (data['Close'] >= y2_min) & (data['Close'] <= y2_max))
-st.write(f"P(X en [{x2_min:.2f}, {x2_max:.2f}] y Y en [{y2_min:.2f}, {y2_max:.2f}] ≠) = {prob_non_equal_ranges:.4f}")
+# i) Cálculo de los valores esperados
+expected_open = data['Open'].mean()
+expected_close = data['Close'].mean()
+st.write(f"Valor Esperado de Precio de Apertura (E[X]) = {expected_open:.2f}")
+st.write(f"Valor Esperado de Precio de Cierre (E[Y]) = {expected_close:.2f}")
+
+# ii) Cálculo de la covarianza
+covariance = np.cov(data['Open'], data['Close'])[0][1]
+st.write(f"Covarianza entre Precio de Apertura y Precio de Cierre = {covariance:.2f}")
+
+# iii) Cálculo de la correlación
+correlation = np.corrcoef(data['Open'], data['Close'])[0][1]
+st.write(f"Correlación entre Precio de Apertura y Precio de Cierre = {correlation:.2f}")
 
 # Mostrar los datos utilizados para el análisis
 st.write("Datos de entrada utilizados para el análisis:")
