@@ -64,15 +64,32 @@ st.markdown(href, unsafe_allow_html=True)
 
 ##############################
 
+# Configuración de la página
+st.set_page_config(page_title="Proyecto Final", layout="wide")
 
-# Ruta del archivo PDF
-pdf_file_path = "presentacion.pdf"  # Cambia esto a la ruta de tu archivo PDF
+# Sección del proyecto final
+st.header("Proyecto Final")
 
-# Leer el archivo PDF
-with open(pdf_file_path, "rb") as pdf_file:
-    pdf_bytes = pdf_file.read()
+# Ruta del primer archivo PDF
+pdf_file_path_1 = "proyecto-final-2.pdf"  # Cambia esto a la ruta de tu primer archivo PDF
 
-# Ofrecer la descarga del archivo PDF
-b64_pdf = base64.b64encode(pdf_bytes).decode("utf-8")
-href = f'<a href="data:application/octet-stream;base64,{b64_pdf}" download="presentacion.pdf">Descargar PDF, presentación, proyecto final</a>'
-st.markdown(href, unsafe_allow_html=True)
+# Leer el primer archivo PDF
+with open(pdf_file_path_1, "rb") as pdf_file_1:
+    pdf_bytes_1 = pdf_file_1.read()
+
+# Ofrecer la descarga del primer archivo PDF
+b64_pdf_1 = base64.b64encode(pdf_bytes_1).decode("utf-8")
+href_1 = f'<a href="data:application/octet-stream;base64,{b64_pdf_1}" download="proyecto-final-2.pdf">Descargar PDF, Proyecto Final</a>'
+st.markdown(href_1, unsafe_allow_html=True)
+
+# Ruta del segundo archivo PDF
+pdf_file_path_2 = "presentacion.pdf"  # Cambia esto a la ruta de tu segundo archivo PDF
+
+# Leer el segundo archivo PDF
+with open(pdf_file_path_2, "rb") as pdf_file_2:
+    pdf_bytes_2 = pdf_file_2.read()
+
+# Ofrecer la descarga del segundo archivo PDF
+b64_pdf_2 = base64.b64encode(pdf_bytes_2).decode("utf-8")
+href_2 = f'<a href="data:application/octet-stream;base64,{b64_pdf_2}" download="presentacion.pdf">Descargar PDF, presentacion</a>'
+st.markdown(href_2, unsafe_allow_html=True)
