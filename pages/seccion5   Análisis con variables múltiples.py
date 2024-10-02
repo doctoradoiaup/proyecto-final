@@ -77,12 +77,19 @@ st.pyplot(fig)
 # Cálculo de probabilidades
 st.subheader("Probabilidades Conjuntas")
 
+# Filtrar los datos según los límites seleccionados en los sliders
+filtered_data = data[(data['Open'] >= x_min) & (data['Open'] <= x_max) & (data['Close'] >= y_min) & (data['Close'] <= y_max)]
+
 # i) Probabilidad conjunta P(X en [x_min, x_max] y Y en [y_min, y_max])
 prob_joint = np.mean((data['Open'] >= x_min) & (data['Open'] <= x_max) & (data['Close'] >= y_min) & (data['Close'] <= y_max))
 st.write(f"P(X en [{x_min:.2f}, {x_max:.2f}] y Y en [{y_min:.2f}, {y_max:.2f}]) = {prob_joint:.4f}")
 
-# ii) Probabilidad de que el precio de cierre sea mayor que el de apertura
-prob_close_gt_open = np.mean(data['Close'] > data['Open'])
+# ii) Probabilidad de que el precio de cierre sea mayor que el de apertura en los datos filtrados
+if not filtered_data.empty:  # Asegurarse de que el DataFrame no esté vacío
+    prob_close_gt_open = np.mean(filtered_data['Close'] > filtered_data['Open'])
+else:
+    prob_close_gt_open = 0.0  # Si no hay datos en el rango seleccionado
+
 st.write(f"P(Y > X) = {prob_close_gt_open:.4f}")
 
 # Sección de valores esperados, covarianza y correlación
