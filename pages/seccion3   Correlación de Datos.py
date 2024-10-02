@@ -42,7 +42,6 @@ st.write(data)
 # Sección III.- Correlación de Datos
 st.subheader("Sección III.- Correlación de Datos")
 
-
 # a) Regresión lineal simple y correlación
 st.subheader("a) Regresión Lineal Simple y Correlación")
 
@@ -88,6 +87,10 @@ st.subheader("b) Regresión No Lineal y Múltiple")
 
 # Asumiendo que queremos usar 'Close' y 'Volume' para hacer una regresión múltiple
 if 'Volume' in data.columns:
+    # Calcular la correlación entre 'Close' y 'Volume' para la regresión no lineal y múltiple
+    correlation_multiple = data['Close'].corr(data['Volume'])
+    st.write(f"Correlación entre Precio de Cierre y Volumen (Regresión Múltiple): {correlation_multiple}")
+
     # Crear una nueva variable para una regresión no lineal, como el logaritmo del volumen
     data['Log_Volume'] = np.log(data['Volume'].replace(0, np.nan))
 
