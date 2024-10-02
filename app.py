@@ -77,7 +77,7 @@ with open(pdf_file_path_1, "rb") as pdf_file_1:
 
 # Ofrecer la descarga del primer archivo PDF
 b64_pdf_1 = base64.b64encode(pdf_bytes_1).decode("utf-8")
-href_1 = f'<a href="data:application/octet-stream;base64,{b64_pdf_1}" download="proyecto-final-2.pdf">Descargar PDF, Proyecto Final</a>'
+href_1 = f'<a href="data:application/octet-stream;base64,{b64_pdf_1}" download="proyecto-final-2.pdf">Descargar PDF, proyecto Final</a>'
 st.markdown(href_1, unsafe_allow_html=True)
 
 # Ruta del segundo archivo PDF
