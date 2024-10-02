@@ -120,9 +120,18 @@ if not grupo_a.empty and not grupo_b.empty and not grupo_c.empty:
     
     colores = ['green' if diferencia > lsd else 'red' for diferencia in diferencias]
 
+    # Dibujar las barras
     ax.bar(grupos, diferencias, color=colores)
+
+    # Agregar la línea punteada que representa el valor de LSD
+    ax.axhline(y=lsd, color='blue', linestyle='--', label=f'LSD = {lsd:.4f}')
+
+    # Etiquetas y título del gráfico
     ax.set_ylabel('Diferencia de Medias')
     ax.set_title('Comparación de Diferencias entre Medias (Significativa en verde, No significativa en rojo)')
+
+    # Agregar leyenda
+    ax.legend()
 
     # Mostrar el gráfico en Streamlit
     st.pyplot(fig)
