@@ -59,7 +59,20 @@ with open(pdf_file_path, "rb") as pdf_file:
 
 # Ofrecer la descarga del archivo PDF
 b64_pdf = base64.b64encode(pdf_bytes).decode("utf-8")
-href = f'<a href="data:application/octet-stream;base64,{b64_pdf}" download="proyecto-final-2.pdf">Descargar PDF</a>'
+href = f'<a href="data:application/octet-stream;base64,{b64_pdf}" download="proyecto-final-2.pdf">Descargar PDF, proyecto final</a>'
 st.markdown(href, unsafe_allow_html=True)
 
+##############################
 
+
+# Ruta del archivo PDF
+pdf_file_path = "presentacion.pdf"  # Cambia esto a la ruta de tu archivo PDF
+
+# Leer el archivo PDF
+with open(pdf_file_path, "rb") as pdf_file:
+    pdf_bytes = pdf_file.read()
+
+# Ofrecer la descarga del archivo PDF
+b64_pdf = base64.b64encode(pdf_bytes).decode("utf-8")
+href = f'<a href="data:application/octet-stream;base64,{b64_pdf}" download="presentacion.pdf">Descargar PDF, presentación, proyecto final</a>'
+st.markdown(href, unsafe_allow_html=True)
