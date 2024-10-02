@@ -64,8 +64,6 @@ st.markdown(href, unsafe_allow_html=True)
 
 ##############################
 
-# Configuración de la página
-st.set_page_config(page_title="Proyecto Final", layout="wide")
 
 # Sección del proyecto final
 st.header("Proyecto Final")
