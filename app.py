@@ -44,23 +44,23 @@ st.sidebar.write("Fecha: Octubre del 2024")
 #st.write("Navega a través de las secciones en el menú lateral para explorar más sobre el proyecto.")
 
 
-# Configuración de la página
-#st.set_page_config(page_title="Proyecto Final", layout="wide")
+## Configuración de la página
+##st.set_page_config(page_title="Proyecto Final", layout="wide")
 
-# Título de la aplicación
-#st.title("Visor de PDF en Streamlit")
+## Título de la aplicación
+##st.title("Visor de PDF en Streamlit")
 
-# Ruta del archivo PDF
-pdf_file_path = "proyecto-final-2.pdf"  # Cambia esto a la ruta de tu archivo PDF
+## Ruta del archivo PDF
+#pdf_file_path = "proyecto-final-2.pdf"  # Cambia esto a la ruta de tu archivo PDF
 
-# Leer el archivo PDF
-with open(pdf_file_path, "rb") as pdf_file:
-    pdf_bytes = pdf_file.read()
+## Leer el archivo PDF
+#with open(pdf_file_path, "rb") as pdf_file:
+#    pdf_bytes = pdf_file.read()
 
-# Ofrecer la descarga del archivo PDF
-b64_pdf = base64.b64encode(pdf_bytes).decode("utf-8")
-href = f'<a href="data:application/octet-stream;base64,{b64_pdf}" download="proyecto-final-2.pdf">Descargar PDF, proyecto final</a>'
-st.markdown(href, unsafe_allow_html=True)
+## Ofrecer la descarga del archivo PDF
+#b64_pdf = base64.b64encode(pdf_bytes).decode("utf-8")
+#href = f'<a href="data:application/octet-stream;base64,{b64_pdf}" download="proyecto-final-2.pdf">Descargar PDF, proyecto final</a>'
+#st.markdown(href, unsafe_allow_html=True)
 
 ##############################
 
